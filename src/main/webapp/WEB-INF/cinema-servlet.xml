@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans.xsd
+               http://www.springframework.org/schema/context
+               http://www.springframework.org/schema/context/spring-context.xsd
+               http://www.springframework.org/schema/util
+               http://www.springframework.org/schema/util/spring-util.xsd
+               http://www.springframework.org/schema/mvc
+               http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <import resource="application-security.xml"/>
+    <context:component-scan base-package="io.borlandfcsd.cinemasystem.*"/>
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <mvc:resources mapping="/webjars/**" location="/webjars/"/>
+    <mvc:annotation-driven/>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:validation</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name = "prefix" value = "/WEB-INF/pages/" />
+        <property name = "suffix" value = ".jsp" />
+    </bean>
+
+    <bean name = "multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5242880"/>
+        <property name="maxUploadSizePerFile" value="10485760"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+
+
+    <!--Logic-->
+    <bean name="sessionFactory" class="io.borlandfcsd.cinemasystem.config.HibernateUtil" factory-method="getSessionFactory"/>
+    <bean id="movieDao" class="io.borlandfcsd.cinemasystem.dao.GenericDaoHibernateImpl">
+        <constructor-arg value="io.borlandfcsd.cinemasystem.entity.hibernateEntity.Movie"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="movieSessionDao" class="io.borlandfcsd.cinemasystem.dao.GenericDaoHibernateImpl">
+        <constructor-arg value="io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="ticketDao" class="io.borlandfcsd.cinemasystem.dao.GenericDaoHibernateImpl">
+        <constructor-arg value="io.borlandfcsd.cinemasystem.entity.hibernateEntity.Ticket"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="userDao" class="io.borlandfcsd.cinemasystem.dao.GenericDaoHibernateImpl">
+        <constructor-arg value="io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="roleDao" class="io.borlandfcsd.cinemasystem.dao.GenericDaoHibernateImpl">
+        <constructor-arg value="io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.Role"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean name="movieService" class="io.borlandfcsd.cinemasystem.service.impl.MovieServiceImpl" factory-method="getInstance"/>
+    <bean name="movieSessionService" class="io.borlandfcsd.cinemasystem.service.impl.MovieSessionServiceImpl" factory-method="getInstance"/>
+    <bean name="timetableService" class="io.borlandfcsd.cinemasystem.service.impl.TimetableServiceImpl" factory-method="getInstance"/>
+    <bean name="ticketService" class="io.borlandfcsd.cinemasystem.service.impl.TicketServiceImpl" factory-method="getInstance"/>
+    <!--<bean name="userService" class="io.borlandfcsd.cinemasystem.serviceimpl.userServices.UserService" factory-method="getInstance"/>
+-->
+
+</beans>
