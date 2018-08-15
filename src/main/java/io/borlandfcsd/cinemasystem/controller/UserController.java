@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class UserController {
 
-   private UserService userService;
-   private SecurityService securityService;
-   private UserValidator userValidator;
+    private UserService userService;
+    private SecurityService securityService;
+    private UserValidator userValidator;
 
     @RequestMapping(value = "/signPage")
-    public String getSignUpPage(Model model, String error, String logout){
+    public String getSignUpPage(Model model, String error, String logout) {
         if (error != null) {
             model.addAttribute("error", "Username or password is incorrect.");
         }
@@ -34,28 +34,27 @@ public class UserController {
     }
 
     @PostMapping(value = "/signUp")
-    public String signUp(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model){
-        userValidator.validate(userForm,bindingResult);
-        if(bindingResult.hasErrors()){
+    public String signUp(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+        userValidator.validate(userForm, bindingResult);
+        if (bindingResult.hasErrors()) {
             return "signInUp";
         }
 
         userService.signUp(userForm);
 
-        securityService.autoLogin(userForm.getEmail(),userForm.getPassword());
+        securityService.autoLogin(userForm.getEmail(), userForm.getPassword());
 
         return "redirect:/";
     }
 
 
-
     @PostMapping(value = "/signIn")
-    public String signIn(Model model, String error, String signOut){
-        if (error != null){
+    public String signIn(Model model, String error, String signOut) {
+        if (error != null) {
             model.addAttribute("error", "Model or password is incorrect");
         }
-        if(signOut != null) {
-            model.addAttribute("message","Logged out successfully");
+        if (signOut != null) {
+            model.addAttribute("message", "Logged out successfully");
         }
 
         return "redirect:/";
@@ -65,10 +64,12 @@ public class UserController {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
+
     @Autowired
     public void setSecurityService(SecurityService securityService) {
         this.securityService = securityService;
     }
+
     @Autowired
     public void setUserValidator(UserValidator userValidator) {
         this.userValidator = userValidator;

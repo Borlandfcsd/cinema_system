@@ -1,7 +1,6 @@
 package io.borlandfcsd.cinemasystem.service.impl.userServices;
 
 import io.borlandfcsd.cinemasystem.dao.GenericDao;
-
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.Role;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user =(User)userDao.getEntitiesByColumnName("email", s).get(0);
+        User user = (User) userDao.getEntitiesByColumnName("email", s).get(0);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for(Role role: user.getRoles()){
+        for (Role role : user.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
-                user.getPassword(),grantedAuthorities);
+                user.getPassword(), grantedAuthorities);
     }
 
     @Autowired

@@ -40,13 +40,27 @@
             text-align: center;
         }
 
-        .timetable{
+        .timeline{
             margin: 0 auto;
         }
-        .timetable-header {
+
+        .timeline-row{
+            margin-top: 15px;
+        }
+        .timeline-date{
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+        .timeline-date-value{
+            display: inline-block;
+            font-weight: bold;
+            margin: auto 0;
+            vertical-align: center;
+        }
+        .timeline-header {
             text-align: center;
         }
-        .timetable-cell{
+        .timeline-cell{
             display: inline-block;
             border: 1px solid black;
             background-color: rgba(255, 128, 38, 0.84);
@@ -54,15 +68,24 @@
             text-align: center;
         }
 
-        .timetable-cell-time{
+        .timeline-cell-time{
             border-bottom: 1px solid black;
             padding: 2px 5px;
         }
-        .timetable-cell-title{
+        .timeline-cell-title{
             background-color: #0b93ff;
             padding: 2px 10px;
         }
-        .timetable-cell-title.free-time{
+        #timeline-title{
+            cursor: pointer;
+        }
+
+        #timeline-title:hover{
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .timeline-cell-title.free-time{
             background-color: #9fa8a8;
         }
         #duration-hint{
@@ -70,7 +93,7 @@
         }
     </style>
 
-    <div class="container">
+    <div class="container" id="movieSessionApp">
         <nav class="navbar navbar-expand-sm navbar-custom">
             <a href="<c:url value="/"/>" class="logo navbar-brand">Cinema</a>
             <div class="navbar-collapse collapse" id="navbarCustom">
@@ -126,92 +149,85 @@
                 </table>
             </c:if>
         </div>
-        <div class="row timetable">
-            <div class="col-lg-12">
-                <h5 class="timetable-header">Today timeline</h5>
-                <c:forEach items="${timetable.todayList}" var="todaySession">
-                    <div class="timetable-cell">
+
+<div class="row">
+    <div class="col-5 custom-form">
+        <c:url var="addAction" value="/movieSession/add"/>
+        <form:form action="${addAction}" modelAttribute="movieSession" class="col-lg-12">
+            <div class="row">
+                <fieldset>
+                    <legend>Session Add/Update</legend>
+                    <div  class="col-lg-12" >
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <c:if test="${!empty movieSession.movie}">
+                                    <form:label path="id">
+                                        <spring:message text="ID"/>
+                                    </form:label>
+                                    <form:input class="form-control" path="id" readonly="true" size="8" disabled="true"/>
+                                    <form:hidden path="id"/>
+                                </c:if>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="movie.id">
+                                    <spring:message text="Movie"/>
+                                </form:label>
+                                <form:select id="movie-list" class="form-control" onclick="movieSessionApp.refreshDuration()" path="movie.id">
+                                    <c:forEach items="${movieList}" var="film">
+                                        <form:option  value="${film.id}" data-duration="${film.duration}">${film.title}</form:option>
+                                    </c:forEach>
+                                </form:select>
+                                <span id="duration-hint">{{duration}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="beginDate">
+                                    <spring:message text="Begin date"/>
+                                </form:label>
+                                <form:input class="form-control" id="begin-date" type="datetime-local" path="beginDate" value="${timetable.freeTimeForNextSession}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <input type="submit"
+                                       class="btn btn-primary"
+                                       value="<spring:message text="Save movie session"/>"/>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </form:form>
+    </div>
+    <div class="col-7 timeline">
+        <h5 class="timeline-header">Timeline</h5>
+        <c:forEach items="${timetable.week.days.values()}" var="day">
+            <div class="row timeline-row">
+                <div class="timeline-date">
+                    <span class="timeline-date-value">${day.date}</span>
+                </div>
+
+                <c:forEach items="${day.timeline.timeline}" var="todaySession">
+                    <div class="timeline-cell">
                         <c:set value="${todaySession.beginDate.toLocalTime()}" var="begin"/>
                         <c:set value="${todaySession.endDate.toLocalTime()}" var="end"/>
-                        <div class="timetable-cell-time"> ${begin} - ${end}</div>
+                        <div class="timeline-cell-time"> ${begin} - ${end}</div>
                         <c:if test="${todaySession.movie.title.equals('free time')}" >
-                            <div class="timetable-cell-title free-time">${todaySession.movie.title}</div>
+                            <div class="timeline-cell-title free-time"  id="timeline-title" v-on:click="setDate" data-date="${todaySession.beginDate}">${todaySession.movie.title}</div>
                         </c:if>
                         <c:if test="${!todaySession.movie.title.equals('free time')}" >
-                            <div class="timetable-cell-title">${todaySession.movie.title}</div>
+                            <div class="timeline-cell-title">${todaySession.movie.title}</div>
                         </c:if>
-
                     </div>
                 </c:forEach>
             </div>
-        </div>
-        <div id="createSessionApp" class="custom-form row">
-            <c:url var="addAction" value="/movieSession/add"/>
-            <form:form action="${addAction}" modelAttribute="movieSession" class="col-lg-5">
-                <div class="row">
-                    <fieldset>
-                        <legend>Session Add/Update</legend>
-                        <div  class="col-lg-12" >
-                            <div class="row">
-                                <div class="col-lg-12 form-group">
-                                    <c:if test="${!empty movieSession.movie}">
-                                        <form:label path="id">
-                                            <spring:message text="ID"/>
-                                        </form:label>
-                                        <form:input class="form-control" path="id" readonly="true" size="8" disabled="true"/>
-                                        <form:hidden path="id"/>
-                                    </c:if>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 form-group" id="addSessionApp">
-                                    <%--<form:label path="movie.id">
-                                        <spring:message text="Movie id"/>
-                                    </form:label>
-                                    <form:select id="movie-list" class="form-control" path="movie.id" onclick="addSessionApp.refreshDuration()">
-                                        <c:forEach items="${movieList}" var="film">
-                                            <form:option value="${film.id}"  data-duration="${film.duration}">${film.title}</form:option>
-                                        </c:forEach>
-                                    </form:select>--%>
-                                        <form:label path="movie.id">
-                                           <spring:message text="Movie"/>
-                                        </form:label>
-                                        <form:select id="movie-list" class="form-control" path="movie.id">
-                                            <c:forEach items="${movieList}" var="film">
-                                                <form:option  value="${film.id}"  data-duration="${film.duration}">${film.title}</form:option>
-                                            </c:forEach>
-                                        </form:select>
-                                    <span id="duration-hint">{{duration}}</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 form-group">
-                                    <form:label path="beginDate">
-                                        <spring:message text="Begin date"/>
-                                    </form:label>
-                                    <form:input class="form-control" type="datetime-local" path="beginDate" value="${timetable.freeTimeForNextSession}"/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <date-field  v-bind:value="getDate"></date-field>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 form-group">
-                                    <input type="submit"
-                                           class="btn btn-primary"
-                                           value="<spring:message text="Save movie session"/>"/>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-            </form:form>
-        </div>
-
+        </c:forEach>
+    </div>
+</div>
     </div>
     <script src="${contextPath}/resources/js/movieSession.js"></script>
-    <script src="${contextPath}/resources/js/createSessionApp.js"></script>
 </body>
 </html>

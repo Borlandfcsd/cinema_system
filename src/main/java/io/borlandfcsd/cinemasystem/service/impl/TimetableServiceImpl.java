@@ -7,10 +7,7 @@ import io.borlandfcsd.cinemasystem.service.TimetableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
 
 @Component
 public class TimetableServiceImpl implements TimetableService {
@@ -33,7 +30,7 @@ public class TimetableServiceImpl implements TimetableService {
     }
 
     public static TimetableServiceImpl getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new TimetableServiceImpl();
         }
         return instance;

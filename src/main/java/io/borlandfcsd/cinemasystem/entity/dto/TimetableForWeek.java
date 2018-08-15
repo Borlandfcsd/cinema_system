@@ -19,27 +19,27 @@ public class TimetableForWeek {
         this.days = days;
     }
 
-    public void  addDay(LocalDate date,TimetableForOneDay day){
-        if (days == null){
+    public void addDay(LocalDate date, TimetableForOneDay day) {
+        if (days == null) {
             days = new LinkedHashMap<>();
         }
-        days.put(setKeyName(date),day);
+        days.put(setKeyName(date), day);
     }
 
-    private String setKeyName(LocalDate date){
-       String dayOfWeek =  formatDayName(date);
-       return dayOfWeek + getTimestamp(date);
+    private String setKeyName(LocalDate date) {
+        String dayOfWeek = formatDayName(date);
+        return dayOfWeek + getTimestamp(date);
     }
+
     private String formatDayName(LocalDate date) {
         String dayName = date.getDayOfWeek().name();
-        return dayName.substring(0,1).toUpperCase() + dayName.substring(1).toLowerCase();
+        return dayName.substring(0, 1).toUpperCase() + dayName.substring(1).toLowerCase();
     }
 
     private String getTimestamp(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM");
-        return " (" + date.format(formatter) +")";
+        return " (" + date.format(formatter) + ")";
     }
-
 
 
 }

@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.borlandfcsd.cinemasystem.dao.GenericDaoHibernateImplTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.034 sec

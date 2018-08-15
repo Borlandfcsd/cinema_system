@@ -13,12 +13,13 @@ import java.util.Map;
 public class TimetableForOneDay {
     private LocalDate date;
     private MovieSession lastSession;
-    private List<MovieSession> sessionsForDay;
-    private Map<Movie,List<MovieSession>> movieSessionsMap;
+    private List<MovieSession> allSession; // just list with all session for day
+    private Timeline timeline; // sessions with free time space;
+    private Map<Movie, List<MovieSession>> movieSessionsMap; // group session for movie
 
-    public void addSession(MovieSession session){
+    public void addSession(MovieSession session) {
         checkLastSession(session);
-        if (movieSessionsMap == null){
+        if (movieSessionsMap == null) {
             movieSessionsMap = new HashMap<>();
         }
         Movie key = session.getMovie();
@@ -28,15 +29,16 @@ public class TimetableForOneDay {
         } else {
             movieSessionsMap.get(key).add(session);
         }
+        setTimeline(allSession);
     }
 
-    private void checkLastSession(MovieSession session){
-        if(lastSession == null){
+    private void checkLastSession(MovieSession session) {
+        if (lastSession == null) {
             lastSession = session;
         }
         LocalDateTime currentDate = lastSession.getBeginDate();
         LocalDateTime pretender = session.getBeginDate();
-        if (currentDate.isBefore(pretender)){
+        if (currentDate.isBefore(pretender)) {
             lastSession = session;
         }
     }
@@ -50,10 +52,18 @@ public class TimetableForOneDay {
     }
 
     public Map<Movie, List<MovieSession>> getMovieSessionsMap() {
-        if (movieSessionsMap == null){
+        if (movieSessionsMap == null) {
             return new HashMap<>();
         }
         return movieSessionsMap;
+    }
+
+    public Timeline getTimeline() {
+        return timeline;
+    }
+
+    public void setTimeline(List<MovieSession> sessionList) {
+        this.timeline = new Timeline(sessionList);
     }
 
     public void setMovieSessionsMap(Map<Movie, List<MovieSession>> day) {
@@ -64,12 +74,12 @@ public class TimetableForOneDay {
         return lastSession;
     }
 
-    public List<MovieSession> getSessionsForDay() {
-        return sessionsForDay;
+    public List<MovieSession> getAllSession() {
+        return allSession;
     }
 
-    public void setSessionsForDay(List<MovieSession> sessionsForDay) {
-        this.sessionsForDay = sessionsForDay;
+    public void setAllSession(List<MovieSession> allSession) {
+        this.allSession = allSession;
     }
 
 }

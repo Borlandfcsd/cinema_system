@@ -18,7 +18,7 @@ public class MovieSession implements Serializable {
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
-    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Column(name = "begin_date", unique = true, nullable = false)
     private LocalDateTime beginDate;
     @Transient
@@ -58,11 +58,12 @@ public class MovieSession implements Serializable {
         return endDate;
     }
 
-    public LocalTime getBeginTime(){
+    public LocalTime getBeginTime() {
         return beginDate.toLocalTime();
     }
 
-    public LocalTime getEndTime(){
+    public LocalTime getEndTime() {
+        getEndDate();
         return endDate.toLocalTime();
     }
 

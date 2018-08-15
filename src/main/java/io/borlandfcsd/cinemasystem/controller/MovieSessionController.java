@@ -30,7 +30,7 @@ public class MovieSessionController {
 
 
     @RequestMapping(value = "movieSessions", method = RequestMethod.GET)
-    public String movieSessionList(Model model){
+    public String movieSessionList(Model model) {
         model.addAttribute("movieSession", new MovieSession());
         model.addAttribute("timetable", timetableService.getTimetable());
         model.addAttribute("movieList", movieService.getAllMovies());
@@ -39,8 +39,8 @@ public class MovieSessionController {
     }
 
     @RequestMapping(value = "/movieSession/add", method = RequestMethod.POST)
-    public String addSession(@ModelAttribute("movieSession")MovieSession movieSession,
-                             RedirectAttributes redirect){
+    public String addSession(@ModelAttribute("movieSession") MovieSession movieSession,
+                             RedirectAttributes redirect) {
         if (movieSession.getId() == 0) {
             movieSessionService.addMovieSession(movieSession);
             redirect.addFlashAttribute("message", " has been added");
@@ -52,9 +52,9 @@ public class MovieSessionController {
     }
 
     @RequestMapping(value = "/removeSession/{id}")
-    public String removeSession(@PathVariable("id") int id, RedirectAttributes redirect){
+    public String removeSession(@PathVariable("id") int id, RedirectAttributes redirect) {
         movieSessionService.removeMovieSession(id);
-        redirect.addFlashAttribute("message"," has been removed");
+        redirect.addFlashAttribute("message", " has been removed");
         return "redirect:/movieSessions";
     }
 
@@ -71,20 +71,20 @@ public class MovieSessionController {
         model.addAttribute("movieSession", movieSessionService.getMovieSession(id));
         model.addAttribute("tickets", ticketService.getTickets(id));
         model.addAttribute("reservedTicket", new Ticket());
-        model.addAttribute("pathToPoster",movieService.getPathToPoster());
+        model.addAttribute("pathToPoster", movieService.getPathToPoster());
 
         return "movieSession/sessionPage";
     }
 
-    @RequestMapping(value = "/sessionPage/reserveTickets",method = RequestMethod.POST)
+    @RequestMapping(value = "/sessionPage/reserveTickets", method = RequestMethod.POST)
     public @ResponseBody
     ReserveTicketResponse reserveTickets(@RequestBody TicketDto ticketDto, RedirectAttributes redirect) {
-            int sessionID = ticketDto.getSessionID();
-            MovieSession session = movieSessionService.getMovieSession(sessionID);
-            ticketService.reserveTickets(ticketDto, session);
-            ReserveTicketResponse resp = new ReserveTicketResponse();
-            resp.setMessage("Tickets has been reserved success");
-            return resp;
+        int sessionID = ticketDto.getSessionID();
+        MovieSession session = movieSessionService.getMovieSession(sessionID);
+        ticketService.reserveTickets(ticketDto, session);
+        ReserveTicketResponse resp = new ReserveTicketResponse();
+        resp.setMessage("Tickets has been reserved success");
+        return resp;
     }
 
 
@@ -102,10 +102,12 @@ public class MovieSessionController {
     public void setTicketService(TicketServiceImpl ticketServiceImpl) {
         this.ticketService = ticketServiceImpl;
     }
+
     @Autowired
     public void setTicketService(TicketService ticketService) {
         this.ticketService = ticketService;
     }
+
     @Autowired
     public void setTimetableService(TimetableService timetableService) {
         this.timetableService = timetableService;

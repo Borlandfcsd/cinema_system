@@ -24,7 +24,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "movies", method = RequestMethod.GET)
-    public String getMoviesPage(Model model){
+    public String getMoviesPage(Model model) {
         model.addAttribute("movie", new Movie());
         model.addAttribute("listMovies", movieService.getAllMovies());
 
@@ -32,9 +32,9 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/movies/add", method = RequestMethod.POST)
-    public String addMovie(@ModelAttribute("movie")Movie movie,
-                           @RequestParam("picture")MultipartFile poster,
-                           RedirectAttributes redirect){
+    public String addMovie(@ModelAttribute("movie") Movie movie,
+                           @RequestParam("picture") MultipartFile poster,
+                           RedirectAttributes redirect) {
 
         String path = movieService.savePoster(poster);
         movie.setPoster(path);
@@ -60,7 +60,7 @@ public class MovieController {
     }*/
 
     @RequestMapping(value = "/removeMovie/{id}")
-    public String removeMovie(@PathVariable("id") int id, RedirectAttributes redirect){
+    public String removeMovie(@PathVariable("id") int id, RedirectAttributes redirect) {
         movieService.removeMovie(id);
         redirect.addFlashAttribute("message", " has been removed");
         //redirect.addFlashAttribute("exception", "This movie has active session");
@@ -77,19 +77,18 @@ public class MovieController {
 
     @RequestMapping(value = "moviePage/{id}")
     public String moviePage(@PathVariable("id") int id, Model model) {
-        model.addAttribute("pathToPoster",movieService.getPathToPoster());
+        model.addAttribute("pathToPoster", movieService.getPathToPoster());
         model.addAttribute("movie", movieService.getMovieById(id));
 
         return "movie/moviePage";
     }
 
     @RequestMapping(value = "/")
-    public String showIndexPage(Model model){
-        model.addAttribute("pathToPoster",movieService.getPathToPoster());
-        model.addAttribute("timetable",timetableService.getTimetable());
+    public String showIndexPage(Model model) {
+        model.addAttribute("pathToPoster", movieService.getPathToPoster());
+        model.addAttribute("timetable", timetableService.getTimetable());
         return "index";
     }
-
 
 
 }

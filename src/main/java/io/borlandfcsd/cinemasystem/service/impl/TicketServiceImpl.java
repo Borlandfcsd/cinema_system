@@ -24,10 +24,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @SuppressWarnings("unchecked")
-    public CinemaHall getTickets(int id){
+    public CinemaHall getTickets(int id) {
         List<Ticket> tickets = ticketDao.getEntitiesByColumnName("session_id", id);
         CinemaHall cinemaHall = new CinemaHall();
-        if(!tickets.isEmpty()) {
+        if (!tickets.isEmpty()) {
             for (Ticket ticket : tickets) {
                 int row = ticket.getRow();
                 int place = ticket.getPlace();
@@ -38,8 +38,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @SuppressWarnings("unchecked")
-    public void reserveTickets(TicketDto tickets, MovieSession session){
-        for(Ticket ticket: tickets.getTickets()) {
+    public void reserveTickets(TicketDto tickets, MovieSession session) {
+        for (Ticket ticket : tickets.getTickets()) {
             ticket.setMovieSession(session);
             ticket.setPlaceStatus(PlaceStatus.RESERVED);
             ticketDao.addEntity(ticket);
@@ -51,7 +51,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     public static TicketServiceImpl getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new TicketServiceImpl();
         }
         return instance;

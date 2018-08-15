@@ -1,9 +1,7 @@
 package io.borlandfcsd.cinemasystem.entity.hibernateEntity;
 
 
-
 import io.borlandfcsd.cinemasystem.entity.PlaceStatus;
-import org.hibernate.SessionFactory;
 
 import javax.persistence.*;
 import java.io.Serializable;

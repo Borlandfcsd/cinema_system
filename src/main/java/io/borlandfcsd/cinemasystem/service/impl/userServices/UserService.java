@@ -3,7 +3,6 @@ package io.borlandfcsd.cinemasystem.service.impl.userServices;
 import io.borlandfcsd.cinemasystem.dao.GenericDao;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.Role;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -27,27 +26,26 @@ public class UserService {
 
 
     @SuppressWarnings("unchecked")
-    public void signUp(User user){
+    public void signUp(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();
-        roles.add((Role)roleDao.getEntity(1L));
+        roles.add((Role) roleDao.getEntity(1L));
         user.setRoles(roles);
         userDao.addEntity(user);
     }
 
     @SuppressWarnings(value = "unchecked")
-    public User getByEmail(String email){
+    public User getByEmail(String email) {
         List<User> users = userDao.getEntitiesByColumnName("email", email);
-        if(users.size() > 0) {
-            return (User)users.get(0);
+        if (users.size() > 0) {
+            return (User) users.get(0);
         }
-        return null ;
+        return null;
     }
 
 
-
     public static UserService getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new UserService();
         }
         return instance;
@@ -57,14 +55,17 @@ public class UserService {
     public void setUserDao(GenericDao userDao) {
         this.userDao = userDao;
     }
+
     @Autowired
     public void setRoleDao(GenericDao roleDao) {
         this.roleDao = roleDao;
     }
+
     @Autowired
     public static void setInstance(UserService instance) {
         UserService.instance = instance;
     }
+
     @Autowired
     public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
