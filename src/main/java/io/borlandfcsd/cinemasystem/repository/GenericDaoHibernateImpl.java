@@ -1,4 +1,4 @@
-package io.borlandfcsd.cinemasystem.dao;
+package io.borlandfcsd.cinemasystem.repository;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;

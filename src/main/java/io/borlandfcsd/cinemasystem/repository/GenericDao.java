@@ -1,4 +1,4 @@
-package io.borlandfcsd.cinemasystem.dao;
+package io.borlandfcsd.cinemasystem.repository;
 
 import java.io.Serializable;
 import java.util.List;

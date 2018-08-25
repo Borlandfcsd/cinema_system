@@ -1,6 +1,6 @@
 package io.borlandfcsd.cinemasystem.service.impl;
 
-import io.borlandfcsd.cinemasystem.dao.GenericDao;
+import io.borlandfcsd.cinemasystem.repository.GenericDao;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Movie;
 import io.borlandfcsd.cinemasystem.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;

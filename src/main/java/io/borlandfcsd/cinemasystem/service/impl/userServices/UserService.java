@@ -1,6 +1,6 @@
 package io.borlandfcsd.cinemasystem.service.impl.userServices;
 
-import io.borlandfcsd.cinemasystem.dao.GenericDao;
+import io.borlandfcsd.cinemasystem.repository.GenericDao;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.Role;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;

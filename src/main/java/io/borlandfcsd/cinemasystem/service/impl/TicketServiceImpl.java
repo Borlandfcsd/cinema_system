@@ -1,6 +1,6 @@
 package io.borlandfcsd.cinemasystem.service.impl;
 
-import io.borlandfcsd.cinemasystem.dao.GenericDao;
+import io.borlandfcsd.cinemasystem.repository.GenericDao;
 import io.borlandfcsd.cinemasystem.entity.CinemaHall;
 import io.borlandfcsd.cinemasystem.entity.PlaceStatus;
 import io.borlandfcsd.cinemasystem.entity.dto.TicketDto;
