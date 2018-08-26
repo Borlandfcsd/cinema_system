@@ -11,7 +11,7 @@
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <beans:bean id="userDetailsServiceImp" class="io.borlandfcsd.cinemasystem.service.impl.userServices.CustomUserDetailsService"/>
+
     <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <beans:constructor-arg name="strength" value="11"/>
     </beans:bean>
@@ -27,7 +27,7 @@
 
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="userDetailsServiceImp">
+        <authentication-provider user-service-ref="userDetailsService">
             <password-encoder ref="encoder"/>
         </authentication-provider>
     </authentication-manager>

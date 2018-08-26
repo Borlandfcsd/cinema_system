@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
@@ -41,10 +42,10 @@ public class DataConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        dataSource.setDriverClassName(PROP_DATABASE_DRIVER);
-        dataSource.setUrl(PROP_DATABASE_URL);
-        dataSource.setUsername(PROP_DATABASE_USERNAME);
-        dataSource.setPassword(PROP_DATABASE_PASSWORD);
+        dataSource.setDriverClassName(env.getRequiredProperty(PROP_DATABASE_DRIVER));
+        dataSource.setUrl(env.getRequiredProperty(PROP_DATABASE_URL));
+        dataSource.setUsername(env.getRequiredProperty(PROP_DATABASE_USERNAME));
+        dataSource.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
 
         initializeDatabase(dataSource);
 
@@ -61,17 +62,17 @@ public class DataConfig {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setDatabase(org.springframework.orm.jpa.vendor.Database.POSTGRESQL);
 
-        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN));
 
-        entityManagerFactory.setDataSource(dataSource());
-        entityManagerFactory.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        entityManagerFactory.setPackagesToScan(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN);
+        entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
 
-        entityManagerFactory.setJpaProperties(getHibernateProperties());
-        entityManagerFactory.setJpaProperties(getHibernateProperties());
-
-        return entityManagerFactory;
+        return entityManagerFactoryBean;
     }
 
     @Bean

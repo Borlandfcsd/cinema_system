@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
+@Table(name = "users")
 public class User implements Serializable {
     @Id
     @GeneratedValue

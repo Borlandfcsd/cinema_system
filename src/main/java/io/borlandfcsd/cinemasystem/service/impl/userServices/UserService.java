@@ -1,73 +1,46 @@
 package io.borlandfcsd.cinemasystem.service.impl.userServices;
 
-import io.borlandfcsd.cinemasystem.repository.GenericDao;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.Role;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User;
+import io.borlandfcsd.cinemasystem.repository.RoleRepository;
+import io.borlandfcsd.cinemasystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
-@Component
+@Service
 public class UserService {
-    private static UserService instance;
 
-    private GenericDao userDao;
-    private GenericDao roleDao;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
+    private BCryptPasswordEncoder encoder;
 
-    private UserService() {
-
+    @Autowired
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder encoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.encoder = encoder;
     }
 
-
     @SuppressWarnings("unchecked")
+    @Transactional
     public void signUp(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(encoder.encode(user.getPassword()));
         Set<Role> roles = new HashSet<>();
-        roles.add((Role) roleDao.getEntity(1L));
+        Role role = roleRepository.getOne(1);
+        roles.add(role);
         user.setRoles(roles);
-        userDao.addEntity(user);
+        userRepository.saveAndFlush(user);
     }
 
     @SuppressWarnings(value = "unchecked")
+    @Transactional
     public User getByEmail(String email) {
-        List<User> users = userDao.getEntitiesByColumnName("email", email);
-        if (users.size() > 0) {
-            return (User) users.get(0);
-        }
-        return null;
-    }
-
-
-    public static UserService getInstance() {
-        if (instance == null) {
-            instance = new UserService();
-        }
-        return instance;
-    }
-
-    @Autowired
-    public void setUserDao(GenericDao userDao) {
-        this.userDao = userDao;
-    }
-
-    @Autowired
-    public void setRoleDao(GenericDao roleDao) {
-        this.roleDao = roleDao;
-    }
-
-    @Autowired
-    public static void setInstance(UserService instance) {
-        UserService.instance = instance;
-    }
-
-    @Autowired
-    public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        return userRepository.getByEmail(email);
     }
 }

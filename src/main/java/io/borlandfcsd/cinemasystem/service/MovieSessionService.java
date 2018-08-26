@@ -1,5 +1,6 @@
 package io.borlandfcsd.cinemasystem.service;
 
+import io.borlandfcsd.cinemasystem.entity.dto.Timetable;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ public interface MovieSessionService {
     void addMovieSession(MovieSession movieSession);
     MovieSession getMovieSession(int id);
     List<MovieSession> getMovieSessions();
+    Timetable getTimetable();
     List<MovieSession> getMovieSessionsForDay(LocalDate date);
     void updateMovieSession(MovieSession movieSession);
     void removeMovieSession(int id);

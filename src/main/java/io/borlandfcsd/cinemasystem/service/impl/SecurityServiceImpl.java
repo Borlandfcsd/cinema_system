@@ -14,10 +14,16 @@ public class SecurityServiceImpl implements SecurityService {
     private UserDetailsService userDetailsService;
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    public SecurityServiceImpl(UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
+    }
+
     @Override
     public String findLoggedInEmail() {
         Object userDetail = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (userDetail instanceof UserDetailsService) {
+        if(userDetail instanceof UserDetailsService){
             return ((UserDetails) userDetail).getUsername();
         }
 
@@ -28,23 +34,13 @@ public class SecurityServiceImpl implements SecurityService {
     public void autoLogin(String email, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                userDetails, password, userDetails.getAuthorities());
+                userDetails,password,userDetails.getAuthorities());
 
         authenticationManager.authenticate(authenticationToken);
 
-        if (authenticationToken.isAuthenticated()) {
+        if (authenticationToken.isAuthenticated()){
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
-    }
-
-    @Autowired
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
-
-    @Autowired
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
     }
 }

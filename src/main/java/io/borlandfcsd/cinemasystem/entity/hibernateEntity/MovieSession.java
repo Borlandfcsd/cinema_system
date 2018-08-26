@@ -9,8 +9,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
-@Table(name = "timetable", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id")})
+@Table(name = "sessions")
 public class MovieSession implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

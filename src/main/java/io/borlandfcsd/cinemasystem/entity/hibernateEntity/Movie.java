@@ -6,10 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "movies", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id"),
-        @UniqueConstraint(columnNames = "title")
-})
+@Table(name = "movies")
 public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

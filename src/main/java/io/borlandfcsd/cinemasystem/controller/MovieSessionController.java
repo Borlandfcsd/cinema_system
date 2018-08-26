@@ -8,8 +8,6 @@ import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Ticket;
 import io.borlandfcsd.cinemasystem.service.MovieService;
 import io.borlandfcsd.cinemasystem.service.MovieSessionService;
 import io.borlandfcsd.cinemasystem.service.TicketService;
-import io.borlandfcsd.cinemasystem.service.TimetableService;
-import io.borlandfcsd.cinemasystem.service.impl.TicketServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -17,22 +15,23 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 @Controller
 public class MovieSessionController {
     private MovieSessionService movieSessionService;
     private MovieService movieService;
     private TicketService ticketService;
-    private TimetableService timetableService;
 
+    @Autowired
+    public MovieSessionController(MovieSessionService movieSessionService, MovieService movieService, TicketService ticketService) {
+        this.movieSessionService = movieSessionService;
+        this.movieService = movieService;
+        this.ticketService = ticketService;
+    }
 
     @RequestMapping(value = "movieSessions", method = RequestMethod.GET)
     public String movieSessionList(Model model) {
         model.addAttribute("movieSession", new MovieSession());
-        model.addAttribute("timetable", timetableService.getTimetable());
+        model.addAttribute("timetable", movieSessionService.getTimetable());
         model.addAttribute("movieList", movieService.getAllMovies());
 
         return "movieSession/movieSessions";
@@ -69,7 +68,7 @@ public class MovieSessionController {
     @RequestMapping(value = "sessionPage/{id}")
     public String getSessionPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("movieSession", movieSessionService.getMovieSession(id));
-        model.addAttribute("tickets", ticketService.getTickets(id));
+        model.addAttribute("tickets", ticketService.getTicketsForSession(id));
         model.addAttribute("reservedTicket", new Ticket());
         model.addAttribute("pathToPoster", movieService.getPathToPoster());
 
@@ -85,31 +84,5 @@ public class MovieSessionController {
         ReserveTicketResponse resp = new ReserveTicketResponse();
         resp.setMessage("Tickets has been reserved success");
         return resp;
-    }
-
-
-    @Autowired
-    public void setMovieSessionService(MovieSessionService movieSessionService) {
-        this.movieSessionService = movieSessionService;
-    }
-
-    @Autowired
-    public void setMovieService(MovieService movieService) {
-        this.movieService = movieService;
-    }
-
-    @Autowired
-    public void setTicketService(TicketServiceImpl ticketServiceImpl) {
-        this.ticketService = ticketServiceImpl;
-    }
-
-    @Autowired
-    public void setTicketService(TicketService ticketService) {
-        this.ticketService = ticketService;
-    }
-
-    @Autowired
-    public void setTimetableService(TimetableService timetableService) {
-        this.timetableService = timetableService;
     }
 }

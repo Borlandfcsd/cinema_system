@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tickets", uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
+@Table(name = "tickets")
 public class Ticket implements Serializable {
     @Id
     @GeneratedValue

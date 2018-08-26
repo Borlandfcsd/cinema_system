@@ -1,34 +1,33 @@
-package io.borlandfcsd.cinemasystem.service.impl;
+package io.borlandfcsd.cinemasystem.service.impl.jpa;
 
-import io.borlandfcsd.cinemasystem.repository.GenericDao;
 import io.borlandfcsd.cinemasystem.entity.CinemaHall;
 import io.borlandfcsd.cinemasystem.entity.PlaceStatus;
 import io.borlandfcsd.cinemasystem.entity.dto.TicketDto;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Ticket;
+import io.borlandfcsd.cinemasystem.repository.TicketRepository;
 import io.borlandfcsd.cinemasystem.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+@Service(value = "ticketService")
 public class TicketServiceImpl implements TicketService {
+    private TicketRepository ticketRepository;
 
-    private static TicketServiceImpl instance;
     @Autowired
-    private GenericDao ticketDao;
-
-    private TicketServiceImpl() {
-
+    public TicketServiceImpl(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
     }
 
-    @SuppressWarnings("unchecked")
-    public CinemaHall getTickets(int id) {
-        List<Ticket> tickets = ticketDao.getEntitiesByColumnName("session_id", id);
+    @Transactional
+    public CinemaHall getTicketsForSession(int sessionId) {
+        List<Ticket> ticketList = ticketRepository.findByMovieSession(sessionId);
         CinemaHall cinemaHall = new CinemaHall();
-        if (!tickets.isEmpty()) {
-            for (Ticket ticket : tickets) {
+        if (!ticketList.isEmpty()) {
+            for (Ticket ticket : ticketList) {
                 int row = ticket.getRow();
                 int place = ticket.getPlace();
                 cinemaHall.setPlaceStatus(row, place, ticket);
@@ -37,23 +36,12 @@ public class TicketServiceImpl implements TicketService {
         return cinemaHall;
     }
 
-    @SuppressWarnings("unchecked")
+    @Transactional
     public void reserveTickets(TicketDto tickets, MovieSession session) {
         for (Ticket ticket : tickets.getTickets()) {
             ticket.setMovieSession(session);
             ticket.setPlaceStatus(PlaceStatus.RESERVED);
-            ticketDao.addEntity(ticket);
+            ticketRepository.saveAndFlush(ticket);
         }
-    }
-
-    private void setTicketDao(GenericDao ticketDao) {
-        this.ticketDao = ticketDao;
-    }
-
-    public static TicketServiceImpl getInstance() {
-        if (instance == null) {
-            instance = new TicketServiceImpl();
-        }
-        return instance;
     }
 }

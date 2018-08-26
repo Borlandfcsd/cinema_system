@@ -5,6 +5,7 @@ import io.borlandfcsd.cinemasystem.entity.dto.TicketDto;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 
 public interface TicketService {
-    CinemaHall getTickets(int id);
+    CinemaHall getTicketsForSession(int sessionId);
+
     void reserveTickets(TicketDto tickets, MovieSession session);
 }
