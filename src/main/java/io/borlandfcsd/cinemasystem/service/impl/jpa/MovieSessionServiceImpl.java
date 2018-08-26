@@ -30,7 +30,7 @@ public class MovieSessionServiceImpl implements MovieSessionService {
 
     @Transactional
     public MovieSession getMovieSession(int id) {
-        return null;
+        return movieSessionRepository.findById(id);
     }
 
     @Transactional

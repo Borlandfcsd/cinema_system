@@ -23,8 +23,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Transactional
-    public CinemaHall getTicketsForSession(int sessionId) {
-        List<Ticket> ticketList = ticketRepository.findByMovieSession(sessionId);
+    public CinemaHall getTicketsForSession(MovieSession session) {
+        List<Ticket> ticketList = ticketRepository.findByMovieSession(session);
         CinemaHall cinemaHall = new CinemaHall();
         if (!ticketList.isEmpty()) {
             for (Ticket ticket : ticketList) {

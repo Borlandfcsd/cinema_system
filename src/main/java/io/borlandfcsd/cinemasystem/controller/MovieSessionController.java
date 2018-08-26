@@ -3,6 +3,7 @@ package io.borlandfcsd.cinemasystem.controller;
 
 import io.borlandfcsd.cinemasystem.entity.dto.ReserveTicketResponse;
 import io.borlandfcsd.cinemasystem.entity.dto.TicketDto;
+import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Movie;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Ticket;
 import io.borlandfcsd.cinemasystem.service.MovieService;
@@ -67,8 +68,9 @@ public class MovieSessionController {
 
     @RequestMapping(value = "sessionPage/{id}")
     public String getSessionPage(@PathVariable("id") int id, Model model) {
-        model.addAttribute("movieSession", movieSessionService.getMovieSession(id));
-        model.addAttribute("tickets", ticketService.getTicketsForSession(id));
+        MovieSession session = movieSessionService.getMovieSession(id);
+        model.addAttribute("movieSession", session);
+        model.addAttribute("tickets", ticketService.getTicketsForSession(session));
         model.addAttribute("reservedTicket", new Ticket());
         model.addAttribute("pathToPoster", movieService.getPathToPoster());
 
