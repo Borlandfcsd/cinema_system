@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Movie;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,7 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO create class for timeline movies
+@Getter
 public class Timeline {
     private static final int MIN_FILM_DURATION = 110;
     private static final LocalTime MAX_SESSION_BEGIN_TIME = LocalTime.of(20, 0);
@@ -72,13 +73,5 @@ public class Timeline {
         freeTime.setBeginDate(prevSessionEndDate.plusMinutes(Timetable.BREAK_BETWEEN_SESSIONS));
 
         return freeTime;
-    }
-
-    public List<MovieSession> getTimeline() {
-        return timeline;
-    }
-
-    public void setTimeline(List<MovieSession> timeline) {
-        this.timeline = timeline;
     }
 }

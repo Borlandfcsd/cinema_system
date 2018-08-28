@@ -4,10 +4,12 @@ import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Movie;
 import io.borlandfcsd.cinemasystem.repository.MovieRepository;
 import io.borlandfcsd.cinemasystem.service.MovieService;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;

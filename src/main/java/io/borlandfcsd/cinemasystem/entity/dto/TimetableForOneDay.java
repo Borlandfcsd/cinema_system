@@ -2,6 +2,8 @@ package io.borlandfcsd.cinemasystem.entity.dto;
 
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Movie;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Getter
+@Setter
 public class TimetableForOneDay {
     private LocalDate date;
     private MovieSession lastSession;
@@ -43,14 +47,6 @@ public class TimetableForOneDay {
         }
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public Map<Movie, List<MovieSession>> getMovieSessionsMap() {
         if (movieSessionsMap == null) {
             return new HashMap<>();
@@ -58,28 +54,10 @@ public class TimetableForOneDay {
         return movieSessionsMap;
     }
 
-    public Timeline getTimeline() {
-        return timeline;
-    }
 
     public void setTimeline(List<MovieSession> sessionList) {
         this.timeline = new Timeline(sessionList);
     }
 
-    public void setMovieSessionsMap(Map<Movie, List<MovieSession>> day) {
-        this.movieSessionsMap = day;
-    }
-
-    public MovieSession getLastSession() {
-        return lastSession;
-    }
-
-    public List<MovieSession> getAllSession() {
-        return allSession;
-    }
-
-    public void setAllSession(List<MovieSession> allSession) {
-        this.allSession = allSession;
-    }
 
 }

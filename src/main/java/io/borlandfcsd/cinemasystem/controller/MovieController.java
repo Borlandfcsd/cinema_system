@@ -47,16 +47,6 @@ public class MovieController {
         return "redirect:/movies";
     }
 
-/*    @RequestMapping(value = "/movies/add", method = RequestMethod.POST)
-    public String addMovie(@ModelAttribute("movie")Movie movie){
-        if (movie.getId() == 0) {
-            movieService.addMovie(movie);
-        } else {
-            movieService.updateMovie(movie);
-        }
-
-        return "redirect:/movies";
-    }*/
 
     @RequestMapping(value = "/removeMovie/{id}")
     public String removeMovie(@PathVariable("id") int id, RedirectAttributes redirect) {

@@ -1,5 +1,7 @@
 package io.borlandfcsd.cinemasystem.entity.hibernateEntity;
 
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -10,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "sessions")
+@Data
 public class MovieSession implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,26 +25,6 @@ public class MovieSession implements Serializable {
     private LocalDateTime beginDate;
     @Transient
     private LocalDateTime endDate;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public Movie getMovie() {
-        return movie;
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
-    }
-
-    public LocalDateTime getBeginDate() {
-        return beginDate;
-    }
 
     public void setBeginDate(LocalDateTime beginDate) {
         this.beginDate = beginDate;
@@ -64,15 +47,5 @@ public class MovieSession implements Serializable {
     public LocalTime getEndTime() {
         getEndDate();
         return endDate.toLocalTime();
-    }
-
-    @Override
-    public String toString() {
-        return "MovieSession{" +
-                "id=" + id +
-                ", movie=" + movie +
-                ", beginDate=" + beginDate +
-                ", endDate=" + endDate +
-                '}';
     }
 }

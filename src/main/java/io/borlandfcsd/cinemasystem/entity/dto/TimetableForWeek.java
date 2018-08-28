@@ -41,5 +41,4 @@ public class TimetableForWeek {
         return " (" + date.format(formatter) + ")";
     }
 
-
 }

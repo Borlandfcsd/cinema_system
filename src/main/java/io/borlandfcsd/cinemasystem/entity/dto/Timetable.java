@@ -1,6 +1,7 @@
 package io.borlandfcsd.cinemasystem.entity.dto;
 
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class Timetable {
     public static int BREAK_BETWEEN_SESSIONS = 25;
     private List<MovieSession> sessions;
@@ -85,11 +87,4 @@ public class Timetable {
         return formatter.format(nextSession);
     }
 
-    public List<MovieSession> getSessions() {
-        return sessions;
-    }
-
-    public TimetableForWeek getWeek() {
-        return week;
-    }
 }
