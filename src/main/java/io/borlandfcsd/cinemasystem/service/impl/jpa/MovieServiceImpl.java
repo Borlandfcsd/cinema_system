@@ -51,7 +51,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Transactional
     public List<Movie> getAllMovies() {
-        return  movieRepository.findAll();
+        return  movieRepository.getAllByOrderByTitleAsc();
     }
 
     @Transactional

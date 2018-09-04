@@ -31,9 +31,10 @@ public class MovieSessionController {
 
     @RequestMapping(value = "movieSessions", method = RequestMethod.GET)
     public String movieSessionList(Model model) {
-                model.addAttribute("movieSession", new MovieSession());
+        model.addAttribute("movieSession", new MovieSession());
         model.addAttribute("timetable", movieSessionService.getTimetable());
         model.addAttribute("movieList", movieService.getAllMovies());
+        model.addAttribute("message", null);
 
         return "movieSession/movieSessions";
     }

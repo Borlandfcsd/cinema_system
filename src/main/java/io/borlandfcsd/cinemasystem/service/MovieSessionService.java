@@ -1,6 +1,6 @@
 package io.borlandfcsd.cinemasystem.service;
 
-import io.borlandfcsd.cinemasystem.entity.dto.Timetable;
+import io.borlandfcsd.cinemasystem.entity.dto.timetable.Timetable;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 
 import java.time.LocalDate;

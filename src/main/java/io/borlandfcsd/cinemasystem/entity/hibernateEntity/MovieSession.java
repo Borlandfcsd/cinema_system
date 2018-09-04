@@ -1,5 +1,6 @@
 package io.borlandfcsd.cinemasystem.entity.hibernateEntity;
 
+import com.sun.istack.internal.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,7 +37,9 @@ public class MovieSession implements Serializable {
     }
 
     public LocalDateTime getEndDate() {
-        endDate = beginDate.plusMinutes(movie.getDuration());
+        if(this.endDate == null) {
+            endDate = beginDate.plusMinutes(movie.getDuration());
+        }
         return endDate;
     }
 
@@ -48,4 +51,5 @@ public class MovieSession implements Serializable {
         getEndDate();
         return endDate.toLocalTime();
     }
+
 }

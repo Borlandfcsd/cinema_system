@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MovieSessionRepository extends JpaRepository<MovieSession, Integer> {
+    List<MovieSession> getAllByOrderByBeginDateAsc();
     Integer removeById(int id);
     MovieSession findById(int id);
     List<MovieSession> findAllByBeginDateBetween(LocalDateTime date1, LocalDateTime date2);

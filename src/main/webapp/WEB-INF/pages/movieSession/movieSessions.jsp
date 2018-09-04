@@ -2,8 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
-<%@ page session="true" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
@@ -33,8 +32,8 @@
             border: 1px groove #ddd !important;
             padding: 0 1.4em 1.4em 1.4em !important;
             margin: 0 0 1.5em 0 !important;
-            -webkit-box-shadow:  0px 0px 0px 0px #000;
-            box-shadow:  0px 0px 0px 0px #000;
+            -webkit-box-shadow:  0 0 0 0 #000;
+            box-shadow:  0 0 0 0 #000;
         }
         legend {
             text-align: center;
@@ -130,14 +129,14 @@
         <hr/>
 
         <div class="row">
-            <c:if test="${!empty timetable.sessions}">
+            <c:if test="${!empty timetable.sessionsForWeek}">
                 <table>
                     <tr>
                         <th width="80">ID</th>
                         <th width="120">Movie Title</th>
                         <th width="120">Date</th>
                     </tr>
-                    <c:forEach items="${timetable.sessions}" var="movieSession">
+                    <c:forEach items="${timetable.sessionsForWeek}" var="movieSession">
                         <tr>
                             <td>${movieSession.id}</td>
                             <td><a href="/moviePage/${movieSession.movie.id}" target="_blank">${movieSession.movie.title}</a></td>
@@ -187,7 +186,7 @@
                                 <form:label path="beginDate">
                                     <spring:message text="Begin date"/>
                                 </form:label>
-                                <form:input class="form-control" id="begin-date" type="datetime-local" path="beginDate" value="${timetable.freeTimeForNextSession}"/>
+                                <form:input class="form-control" id="begin-date" type="datetime-local" path="beginDate" value="${timetable.timeForNextSession}"/>
                             </div>
                         </div>
                         <div class="row">

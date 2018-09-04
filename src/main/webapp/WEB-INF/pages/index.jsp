@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
-<%@ page session="true" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,9 +16,9 @@
 <style>
     .container{
         padding: 20px;
-        -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
-        box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
+        -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 2px 3px 0 rgba(0,0,0,0.2);
+        box-shadow: 0 2px 3px 0 rgba(0,0,0,0.2);
     }
 
     h3{
@@ -115,7 +114,7 @@
             <div class="col-12 day">
                 <h3 class="day-header"> ${day.key}</h3>
                 <div class="row movies" >
-                    <c:forEach items="${day.value.movieSessionsMap}" var="movie">
+                    <c:forEach items="${day.value.movieSessionsForMovie}" var="movie">
                         <div class="col-6 movie">
                             <div class="row movie-body">
                                 <div class="col-5 movie-poster">

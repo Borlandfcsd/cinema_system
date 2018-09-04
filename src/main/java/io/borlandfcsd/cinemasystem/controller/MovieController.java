@@ -76,6 +76,7 @@ public class MovieController {
     public String showIndexPage(Model model) {
         model.addAttribute("pathToPoster", movieService.getPathToPoster());
         model.addAttribute("timetable", movieSessionService.getTimetable());
+        model.addAttribute("message", null);
         return "index";
     }
 
