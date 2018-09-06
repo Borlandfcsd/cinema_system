@@ -37,9 +37,6 @@ public class Day {
 
     private void addSession(MovieSession session) {
         checkLastSession(session);
-        if (movieSessionsForMovie == null) {
-            movieSessionsForMovie = new HashMap<>();
-        }
         Movie key = session.getMovie();
         if (!movieSessionsForMovie.containsKey(key)) {
             movieSessionsForMovie.put(key, new ArrayList<>());
@@ -47,7 +44,6 @@ public class Day {
         } else {
             movieSessionsForMovie.get(key).add(session);
         }
-        timeline.install(sessionsForDay);
     }
 
     private void checkLastSession(MovieSession session) {

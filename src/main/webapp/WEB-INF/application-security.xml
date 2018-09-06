@@ -3,11 +3,10 @@
        xmlns:beans="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 
+
        xsi:schemaLocation="
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd
-
-
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -20,7 +19,7 @@
         <form-login default-target-url="/" login-page="/signPage"
                     authentication-failure-url="/signPage?login_error=t"
                     username-parameter="username" password-parameter="password"/>
-        <intercept-url pattern="/" access="ROLE_ADMIN"/>
+        <intercept-url pattern="/" access="IS_AUTHENTICATED_ANONYMOUSLY, ROLE_ADMIN, ROLE_USER"/>
         <intercept-url pattern="/movieSessions" access="ROLE_ADMIN"/>
         <intercept-url pattern="/movies" access="ROLE_ADMIN"/>
     </http>

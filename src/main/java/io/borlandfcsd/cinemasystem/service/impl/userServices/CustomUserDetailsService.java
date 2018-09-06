@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional()
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.getByEmail(s);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();

@@ -1,7 +1,5 @@
 package io.borlandfcsd.cinemasystem.entity.hibernateEntity;
 
-import com.sun.istack.internal.NotNull;
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 

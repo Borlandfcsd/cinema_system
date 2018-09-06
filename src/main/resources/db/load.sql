@@ -72,7 +72,7 @@ INSERT INTO users(
 	VALUES (2,'borlandfcsd@gmail.com','Viktor','Sapaiev','$2a$11$sBSwsgsi.edYBlT34u5gjeB0WhKhkNGQwxs.ZqktvYEtdResTLlVS');
 INSERT INTO users(
 	id, email, first_name, last_name, password)
-	VALUES (146,'example@mail.com','User','Test','$2a$11$lObWErDzPcFNtv08c3oBluypswilD3rZ/saDzcuwCo7ux1JMs/XYu');
+	VALUES (146,'example@mail.com','User','Test','$2a$11$sBSwsgsi.edYBlT34u5gjeB0WhKhkNGQwxs.ZqktvYEtdResTLlVS');
 
 -- roles data
 INSERT INTO roles(
