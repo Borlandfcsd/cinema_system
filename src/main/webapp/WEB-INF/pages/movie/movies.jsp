@@ -2,7 +2,12 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
-<%@ page session="true" %>
+<%@ taglib  uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal.username" var="login"/>
+</sec:authorize>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -30,8 +35,8 @@
         border: 1px groove #ddd !important;
         padding: 0 1.4em 1.4em 1.4em !important;
         margin: 0 0 1.5em 0 !important;
-        -webkit-box-shadow:  0px 0px 0px 0px #000;
-        box-shadow:  0px 0px 0px 0px #000;
+        -webkit-box-shadow:  0 0 0 0 #000;
+        box-shadow:  0 0 0 0 #000;
     }
     legend {
         text-align: center;
@@ -46,21 +51,23 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<c:url value="/"/>">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="<c:url value="/movies"/>">Movies</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<c:url value="/movieSessions"/>">Movie Sessions</a>
-                </li>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="<c:url value="/admin/movies"/>">Movies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<c:url value="/admin/movieSessions"/>">Movie Sessions</a>
+                    </li>
+                </sec:authorize>
             </ul>
-            <c:if test="${pageContext.request.userPrincipal.name != null}">
-                <span class="ml-auto navbar-text"> ${pageContext.request.userPrincipal.name} | </span>
+            <c:if test="${login != null}">
+                <span class="ml-auto navbar-text"> ${login} | </span>
                 <form id="logoutForm" method="post" action="${contextPath}/logout">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
                 <a  class="nav-link sign-out" onclick="document.forms['logoutForm'].submit()">Sign out</a>
             </c:if>
-            <c:if test="${pageContext.request.userPrincipal.name == null}">
+            <c:if test="${login == null}">
                 <a  class="nav-link" href="<c:url value="/signPage"/>">Sign in/up</a>
             </c:if>
         </div>
@@ -94,8 +101,8 @@
                         <td><a href="/moviePage/${movie.id}" target="_blank">${movie.title}</a></td>
                         <td>${movie.duration}</td>
                         <td>${movie.poster}</td>
-                        <td><a href="<c:url value='/editMovie/${movie.id}'/>">Edit</a></td>
-                        <td><a href="<c:url value='/removeMovie/${movie.id}'/>">Delete</a></td>
+                        <td><a href="<c:url value='/admin/editMovie/${movie.id}'/>">Edit</a></td>
+                        <td><a href="<c:url value='/admin/removeMovie/${movie.id}'/>">Delete</a></td>
                     </tr>
                 </c:forEach>
             </table>
@@ -103,7 +110,7 @@
     </div>
 
     <div class="custom-form row">
-        <c:url var="addAction" value="/movies/add"/>
+        <c:url var="addAction" value="/admin/save?${_csrf.parameterName}=${_csrf.token}"/>
 
         <form:form action="${addAction}" modelAttribute="movie" enctype="multipart/form-data" class="col-lg-5">
         <fieldset>

@@ -13,16 +13,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class MovieController {
     private MovieService movieService;
-    private MovieSessionService movieSessionService;
-
 
     @Autowired
-    public MovieController(MovieService movieService, MovieSessionService movieSessionService) {
+    public MovieController(MovieService movieService) {
         this.movieService = movieService;
-        this.movieSessionService = movieSessionService;
     }
 
-    @RequestMapping(value = "movies", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/movies", method = RequestMethod.GET)
     public String getMoviesPage(Model model) {
         model.addAttribute("movie", new Movie());
         model.addAttribute("listMovies", movieService.getAllMovies());
@@ -30,7 +27,7 @@ public class MovieController {
         return "movie/movies";
     }
 
-    @RequestMapping(value = "/movies/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/save", method = RequestMethod.POST)
     public String addMovie(@ModelAttribute("movie") Movie movie,
                            @RequestParam("picture") MultipartFile poster,
                            RedirectAttributes redirect) {
@@ -44,19 +41,19 @@ public class MovieController {
             movieService.updateMovie(movie);
             redirect.addFlashAttribute("message", " has been updated");
         }
-        return "redirect:/movies";
+        return "redirect:/admin/movies";
     }
 
 
-    @RequestMapping(value = "/removeMovie/{id}")
+    @RequestMapping(value = "/admin/removeMovie/{id}")
     public String removeMovie(@PathVariable("id") int id, RedirectAttributes redirect) {
         movieService.removeMovie(id);
         redirect.addFlashAttribute("message", " has been removed");
         //redirect.addFlashAttribute("exception", "This movie has active session");
-        return "redirect:/movies";
+        return "redirect:/admin/movies";
     }
 
-    @RequestMapping(value = "editMovie/{id}")
+    @RequestMapping(value = "/admin/editMovie/{id}")
     public String editMovie(@PathVariable("id") int id, Model model) {
         model.addAttribute("movie", movieService.getMovieById(id));
         model.addAttribute("listMovies", movieService.getAllMovies());
@@ -72,13 +69,7 @@ public class MovieController {
         return "movie/moviePage";
     }
 
-    @RequestMapping(value = "/")
-    public String showIndexPage(Model model) {
-        model.addAttribute("pathToPoster", movieService.getPathToPoster());
-        model.addAttribute("timetable", movieSessionService.getTimetable());
-        model.addAttribute("message", null);
-        return "index";
-    }
+
 
 
 }

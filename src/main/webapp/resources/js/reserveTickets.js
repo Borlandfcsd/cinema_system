@@ -33,9 +33,11 @@ var reserveApp = new Vue({
             this.price = this.tickets.length * price;
         },
         restPost:function () {
-            var prefix = "/sessionPage/reserveTickets";
+            var prefix = "/tickets/reserveTickets";
             var email = document.getElementById("email").value;
             var sessionID =  document.getElementById("session_id").textContent;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
 
             this.tickets.forEach(function(item, i, arr) {
                 item.email = email;
@@ -46,7 +48,11 @@ var reserveApp = new Vue({
             };
             var jsonString = JSON.stringify(json);
             console.log(jsonString);
-
+            $.ajaxSetup({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header,token)
+                }
+            })
             $.ajax({
                 type: 'POST',
                 url:  prefix,
@@ -57,7 +63,10 @@ var reserveApp = new Vue({
                 mimeType: 'application/json',
                 success: function(data) {
                     alert(data.message)
-                    location.reload();
+                    location.href = "http://localhost:8080/";
+                },
+                failure:function () {
+                    location.href = "http://localhost:8080/signInUp"
                 }
             })
         }

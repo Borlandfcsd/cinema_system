@@ -4,6 +4,12 @@
 <%@ taglib prefix="from" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
+<%@ taglib  uri="http://www.springframework.org/security/tags" prefix="sec"%>
+
+<sec:authorize access="isAuthenticated()">
+    <sec:authentication property="principal.username" var="login"/>
+</sec:authorize>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -100,21 +106,23 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<c:url value="/"/>">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<c:url value="/movies"/>">Movies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="<c:url value="/movieSessions"/>">Movie Sessions</a>
-                    </li>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <li class="nav-item">
+                            <a class="nav-link " href="<c:url value="/admin/movies"/>">Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="<c:url value="/admin/movieSessions"/>">Movie Sessions</a>
+                        </li>
+                    </sec:authorize>
                 </ul>
-                <c:if test="${pageContext.request.userPrincipal.name != null}">
-                    <span class="ml-auto navbar-text"> ${pageContext.request.userPrincipal.name} | </span>
+                <c:if test="${login != null}">
+                    <span class="ml-auto navbar-text"> ${login} | </span>
                     <form id="logoutForm" method="post" action="${contextPath}/logout">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
                     <a  class="nav-link sign-out" onclick="document.forms['logoutForm'].submit()">Sign out</a>
                 </c:if>
-                <c:if test="${pageContext.request.userPrincipal.name == null}">
+                <c:if test="${login == null}">
                     <a  class="nav-link" href="<c:url value="/signPage"/>">Sign in/up</a>
                 </c:if>
             </div>
@@ -141,8 +149,8 @@
                             <td>${movieSession.id}</td>
                             <td><a href="/moviePage/${movieSession.movie.id}" target="_blank">${movieSession.movie.title}</a></td>
                             <td><javatime:format value="${movieSession.beginDate}" style="MS"/></td>
-                            <td><a href="<c:url value='/editSession/${movieSession.id}'/>">Edit</a></td>
-                            <td><a href="<c:url value='/removeSession/${movieSession.id}'/>">Delete</a></td>
+                            <td><a href="<c:url value='/admin/editSession/${movieSession.id}'/>">Edit</a></td>
+                            <td><a href="<c:url value='/admin/removeSession/${movieSession.id}'/>">Delete</a></td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -151,7 +159,7 @@
 
 <div class="row">
     <div class="col-5 custom-form">
-        <c:url var="addAction" value="/movieSession/add"/>
+        <c:url var="addAction" value="/admin/movieSession/add"/>
         <form:form action="${addAction}" modelAttribute="movieSession" class="col-lg-12">
             <div class="row">
                 <fieldset>
