@@ -15,6 +15,7 @@
 
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal.username" var="login"/>
+    <sec:authentication property="principal.authorities" var="role"/>
 </sec:authorize>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
@@ -23,6 +24,7 @@
     <title>Session Page</title>
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <meta name="user-role" content="${role}"/>
     <script src="${contextPath}/webjars/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <link rel='stylesheet' href='${contextPath}/webjars/bootstrap/4.1.1/css/bootstrap.min.css' />
     <script src="${contextPath}/webjars/vue/2.5.13/vue.js"></script>
@@ -80,6 +82,7 @@
 
     .hall-row{
         margin-top: 10px;
+        cursor: default;
     }
     .row-number{
         color: #9fa8a8;
@@ -98,9 +101,9 @@
     .STATIC_EMPTY{
         background: #ff9322;
         color: #fff !important;
-        /*padding: 5px;*/
         margin-right: 5px;
-        border: 1px solid #ff9322
+        border: 1px solid #ff9322;
+        cursor: default;
     }
     .EMPTY:hover {
         background: #fff;
@@ -113,6 +116,7 @@
         margin-right: 5px;
         background-color: #9fa8a8;
         border: 1px solid #9fa8a8;
+        cursor: default;
     }
     .CHECKED{
         color: #077bff !important;
@@ -216,12 +220,6 @@
                                                class="place STATIC_EMPTY">
                                                     ${ticket.place}</a>
                                         </c:if>
-                                        <c:if test="${!(ticket.placeStatus eq 'EMPTY')}">
-                                            <a data-row="${ticket.row}"
-                                               data-place="${ticket.place}"
-                                               data-price="${ticket.price}"
-                                               class="place ${ticket.placeStatus}">X</a>
-                                        </c:if>
                                     </sec:authorize>
                                     <sec:authorize access="hasAnyRole('ROLE_ADMIN','ROLE_USER')">
                                         <c:set var="ticketPrice" value="${ticket.price}"/>
@@ -230,15 +228,16 @@
                                                data-place="${ticket.place}"
                                                data-price="${ticket.price}"
                                                class="place ${ticket.placeStatus}"
-                                               @click="checkTickets" >${ticket.place}</a>
+                                               @click="selectTickets" >${ticket.place}</a>
                                         </c:if>
+                                    </sec:authorize>
                                         <c:if test="${!(ticket.placeStatus eq 'EMPTY')}">
                                             <a data-row="${ticket.row}"
                                                data-place="${ticket.place}"
                                                data-price="${ticket.price}"
                                                class="place ${ticket.placeStatus}">X</a>
                                         </c:if>
-                                    </sec:authorize>
+
                                 </c:forEach>
                             </div>
                         </c:forEach>

@@ -1,6 +1,7 @@
 package io.borlandfcsd.cinemasystem.service.impl.jpa;
 
 import io.borlandfcsd.cinemasystem.entity.comparator.MovieSessionComparator;
+import io.borlandfcsd.cinemasystem.entity.dto.timetable.Day;
 import io.borlandfcsd.cinemasystem.entity.dto.timetable.Timetable;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 import io.borlandfcsd.cinemasystem.repository.MovieSessionRepository;
@@ -44,18 +45,28 @@ public class MovieSessionServiceImpl implements MovieSessionService {
 
     @Transactional
     public List<MovieSession> getMovieSessionsForDay(LocalDate date) {
-        LocalDateTime beginDay = LocalDateTime.of(date,LocalTime.of(0,0,0));
-        LocalDateTime endDay = LocalDateTime.of(date,LocalTime.of(23,59,59));
-        return movieSessionRepository.findAllByBeginDateBetween(beginDay,endDay);
+        LocalDateTime beginDay = LocalDateTime.of(date, LocalTime.of(0, 0, 0));
+        LocalDateTime endDay = LocalDateTime.of(date, LocalTime.of(23, 59, 59));
+        return movieSessionRepository.findAllByBeginDateBetween(beginDay, endDay);
     }
 
     @Transactional
-    public Timetable getTimetable(){
-        LocalDateTime begin = LocalDate.now().atTime(0,0);
-        LocalDateTime end = LocalDate.now().plusDays(6).atTime(23,59);
-        List<MovieSession> list = movieSessionRepository.findAllByBeginDateBetween(begin,end);
+    public Timetable getTimetable() {
+        LocalDateTime begin = LocalDate.now().atTime(0, 0);
+        LocalDateTime end = LocalDate.now().plusDays(6).atTime(23, 59);
+        List<MovieSession> list = movieSessionRepository.findAllByBeginDateBetween(begin, end);
         sort(list);
         return new Timetable(list);
+    }
+
+    @Override
+    public Day getDayWithDate(LocalDate date) {
+        List<MovieSession> list = movieSessionRepository.findAllByBeginDateBetween(
+                date.atTime(0, 0),
+                date.atTime(23, 0)
+        );
+
+        return new Day(date, list);
     }
 
     @Transactional
@@ -68,7 +79,7 @@ public class MovieSessionServiceImpl implements MovieSessionService {
         movieSessionRepository.removeById(id);
     }
 
-    private void sort(List<MovieSession> list){
+    private void sort(List<MovieSession> list) {
         list.sort(comparator);
     }
 }

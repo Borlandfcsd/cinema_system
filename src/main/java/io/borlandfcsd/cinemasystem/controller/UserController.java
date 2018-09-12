@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class UserController {
 
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/signUp")
-    public String signUp(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+    public String signUp(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, HttpServletRequest request) {
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "signInUp";
@@ -44,20 +46,21 @@ public class UserController {
 
         securityService.autoLogin(userForm.getEmail(), userForm.getPassword());
 
-        return "redirect:/";
+        String referer = request.getHeader("Referer");
+        return "redirect:/" + referer;
     }
 
 
     @PostMapping(value = "/signIn")
-    public String signIn(Model model, String error, String signOut) {
+    public String signIn(Model model, String error, String signOut, HttpServletRequest request) {
         if (error != null) {
             model.addAttribute("error", "Model or password is incorrect");
         }
         if (signOut != null) {
             model.addAttribute("message", "Logged out successfully");
         }
-
-        return "redirect:/";
+        String referer = request.getHeader("Referer");
+        return "redirect:/" + referer;
     }
 
     @Autowired

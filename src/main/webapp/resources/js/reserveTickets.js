@@ -8,7 +8,7 @@ var reserveApp = new Vue({
 
     },
     methods: {
-        checkTickets:function (e) {
+        selectTickets:function (e) {
             $(e.currentTarget).toggleClass("CHECKED");
             var row = e.currentTarget.getAttribute("data-row");
             var place = e.currentTarget.getAttribute("data-place");
@@ -42,17 +42,21 @@ var reserveApp = new Vue({
             this.tickets.forEach(function(item, i, arr) {
                 item.email = email;
             });
+            
             var json = {
                 "sessionID":sessionID,
                 "tickets":this.tickets
             };
+            
             var jsonString = JSON.stringify(json);
             console.log(jsonString);
+            
             $.ajaxSetup({
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header,token)
                 }
-            })
+            });
+            
             $.ajax({
                 type: 'POST',
                 url:  prefix,
@@ -62,13 +66,14 @@ var reserveApp = new Vue({
                 processData:false,
                 mimeType: 'application/json',
                 success: function(data) {
-                    alert(data.message)
+                    alert(data.message);
                     location.href = "http://localhost:8080/";
                 },
                 failure:function () {
                     location.href = "http://localhost:8080/signInUp"
                 }
             })
-        }
+        },
     }
+
 });

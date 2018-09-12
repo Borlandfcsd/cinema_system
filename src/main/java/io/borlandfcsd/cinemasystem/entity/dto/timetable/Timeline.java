@@ -3,10 +3,12 @@ package io.borlandfcsd.cinemasystem.entity.dto.timetable;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import io.borlandfcsd.cinemasystem.entity.comparator.MovieSessionComparator;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Movie;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -16,13 +18,15 @@ import java.util.List;
 @Getter
 public class Timeline {
     private static final int MIN_FREE_TIME_PERIOD = 90;
+    private LocalDate date;
     private List<MovieSession> timeline;
     private List<MovieSession> freeTimeList;
 
 
-    public Timeline(List<MovieSession> movieSessions) {
+    public Timeline(List<MovieSession> movieSessions, LocalDate date) {
         this.timeline = new ArrayList<>(movieSessions);
         this.freeTimeList = new ArrayList<>();
+        this.date = date;
         install(movieSessions);
     }
 
@@ -42,8 +46,8 @@ public class Timeline {
         Movie freeMovie = createEmptyMovie(duration);
         MovieSession freeTime = new MovieSession();
         freeTime.setMovie(freeMovie);
-        freeTime.setBeginDate(LocalDateTime.now().with(Timetable.CINEMA_OPENING_TIME));
-        freeTime.setEndDate(LocalDateTime.now().with(Timetable.CINEMA_CLOSING_TIME));
+        freeTime.setBeginDate(date.atTime(Timetable.CINEMA_OPENING_TIME));
+        freeTime.setEndDate(date.atTime(Timetable.CINEMA_CLOSING_TIME));
         return freeTime;
     }
 
@@ -51,15 +55,15 @@ public class Timeline {
         List<MovieSession> immutableList = ImmutableList.copyOf(sessions);
         for (int session = 0; session < immutableList.size(); session++) {
             int nextSession = session + 1;
-            MovieSession defaultSession  = new MovieSession();
+            MovieSession defaultSession = new MovieSession();
             defaultSession.setId(1);
             MovieSession session1 = Iterables.get(immutableList, session, defaultSession);
             MovieSession session2 = Iterables.get(immutableList, nextSession, defaultSession);
             long freeTime = getPeriod(session1, session2);
             if (freeTime >= MIN_FREE_TIME_PERIOD) {
-                session++;
                 MovieSession emptySession = createEmptySession(freeTime, session1.getEndDate());
-                timeline.add(nextSession, emptySession);
+                timeline.add(emptySession);
+                timeline.sort(new MovieSessionComparator());
                 freeTimeList.add(emptySession);
             }
         }

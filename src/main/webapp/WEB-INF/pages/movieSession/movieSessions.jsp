@@ -190,12 +190,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 form-group">
-                                <form:label path="beginDate">
-                                    <spring:message text="Begin date"/>
-                                </form:label>
-                                <form:input class="form-control" id="begin-date" type="datetime-local" path="beginDate" value="${timetable.timeForNextSession}"/>
+                            <spring:bind path="beginDate">
+                            <div class="col-lg-12 form-group ${status.error ? 'alert-danger' : ''}">
+
+                                    <form:label path="beginDate">
+                                        <spring:message text="Begin date"/>
+                                    </form:label>
+                                    <form:input class="form-control" id="begin-date" type="datetime-local" path="beginDate" value="${timetable.timeForNextSession}"/>
+                                    <form:errors path="beginDate"/>
                             </div>
+                            </spring:bind>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 form-group">

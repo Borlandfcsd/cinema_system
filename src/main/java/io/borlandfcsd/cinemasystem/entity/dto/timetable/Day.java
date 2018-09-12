@@ -19,15 +19,15 @@ public class Day {
     private Timeline timeline; // sessions with free time space;
     private Map<Movie, List<MovieSession>> movieSessionsForMovie;
 
-    public Day(LocalDate date, List<MovieSession> sessionsForDay){
+    public Day(LocalDate date, List<MovieSession> sessionsForDay) {
         this.sessionsForDay = sessionsForDay;
-        this.timeline = new Timeline(sessionsForDay);
+        this.timeline = new Timeline(sessionsForDay, date);
         this.movieSessionsForMovie = new HashMap<>();
         this.date = date;
         install();
     }
 
-    private void install(){
+    private void install() {
         for (MovieSession session : sessionsForDay) {
             if (session != null) {
                 addSession(session);
