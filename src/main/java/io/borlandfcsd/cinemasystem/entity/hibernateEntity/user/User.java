@@ -1,7 +1,9 @@
 package io.borlandfcsd.cinemasystem.entity.hibernateEntity.user;
 
 
-import lombok.*;
+import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Ticket;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,6 +32,8 @@ public class User implements Serializable {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+    @Transient
+    private Set<Ticket> tickets;
 
     @Override
     public boolean equals(Object o) {

@@ -58,8 +58,9 @@ CREATE TABLE tickets
     row integer NOT NULL,
     place integer NOT NULL,
     placestatus integer NOT NULL,
-    email character varying(255),
+    user_email character varying(255),
     price double precision,
     PRIMARY KEY (id),
-    FOREIGN KEY (session_id) REFERENCES sessions (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+    FOREIGN KEY (session_id) REFERENCES sessions (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
+    FOREIGN KEY (user_email) REFERENCES users (email) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 )

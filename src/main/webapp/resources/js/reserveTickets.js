@@ -23,7 +23,9 @@ var reserveApp = new Vue({
             }
             if(add){
                 this.tickets.push({
-                        "email":"",
+                    "email": {
+                        "email": ""
+                    },
                         "row": row,
                         "place": place,
                         "price":price
@@ -40,7 +42,7 @@ var reserveApp = new Vue({
             var header = $("meta[name='_csrf_header']").attr("content");
 
             this.tickets.forEach(function(item, i, arr) {
-                item.email = email;
+                item.email.email = email;
             });
             
             var json = {

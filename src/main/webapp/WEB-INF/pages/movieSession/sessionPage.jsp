@@ -251,9 +251,9 @@
             <div class="row tickets">
                 <div class="col-lg-12">
                     <form name="tickets_form" v-if="seen" action="">
-                        <div class="form-group">
+                        <div class="form-group" hidden>
                             <label>Email:</label>
-                            <input id="email" size="30" type="email" autocomplete="email" name="email" >
+                            <input id="email" size="30" type="email" autocomplete="email" name="email" value="${login}">
                         </div>
                         <div class="form-group ticket" >
                             <table class="table">
