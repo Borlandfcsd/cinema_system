@@ -80,7 +80,7 @@ public class MovieSessionController {
     public String getSessionPage(@PathVariable("id") int id, Model model) {
         MovieSession session = movieSessionService.getMovieSession(id);
         model.addAttribute("movieSession", session);
-        model.addAttribute("tickets", ticketService.getTicketsForSession(session));
+        model.addAttribute("tickets", ticketService.getCinemaHallSchema(session));
         model.addAttribute("reservedTicket", new Ticket());
         model.addAttribute("pathToPoster", movieService.getPathToPoster());
 

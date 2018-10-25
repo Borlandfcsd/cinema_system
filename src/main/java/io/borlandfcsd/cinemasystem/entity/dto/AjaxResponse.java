@@ -2,7 +2,7 @@ package io.borlandfcsd.cinemasystem.entity.dto;
 
 import java.io.Serializable;
 
-public class ReserveTicketResponse implements Serializable {
+public class AjaxResponse implements Serializable {
     private String message;
 
     public String getMessage() {
