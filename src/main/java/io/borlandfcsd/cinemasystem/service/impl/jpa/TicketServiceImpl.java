@@ -1,5 +1,6 @@
 package io.borlandfcsd.cinemasystem.service.impl.jpa;
 
+import io.borlandfcsd.cinemasystem.config.state.SecurityState;
 import io.borlandfcsd.cinemasystem.entity.CinemaHall;
 import io.borlandfcsd.cinemasystem.entity.PlaceStatus;
 import io.borlandfcsd.cinemasystem.entity.dto.TicketDto;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service(value = "ticketService")
 public class TicketServiceImpl implements TicketService {
@@ -41,12 +43,17 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Transactional
+    public Set<Ticket> getTicketsForUser(User user) {
+        return ticketRepository.findByUser(SecurityState.getAuthorizedUser());
+    }
+
+    @Transactional
     public void reserveTickets(TicketDto tickets, MovieSession session) {
         for (Ticket ticket : tickets.getTickets()) {
             ticket.setMovieSession(session);
             ticket.setPlaceStatus(PlaceStatus.RESERVED);
-            User user = userService.getByEmail(ticket.getEmail().getEmail());
-            ticket.setEmail(user);
+            //User user = userService.getByEmail(ticket.getEmail().getEmail());
+            ticket.setUser(SecurityState.getAuthorizedUser());
             ticketRepository.saveAndFlush(ticket);
         }
     }

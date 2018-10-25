@@ -22,6 +22,7 @@
         <intercept-url pattern="/" access="hasAnyRole('ROLE_ANONYMOUS','ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url pattern="/tickets/reserveTickets" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
         <intercept-url method="POST" pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url method="POST" pattern="/singUp/**" access="hasRole('ROLE_ANONYMOUS')"/>
     </http>
 
 

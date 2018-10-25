@@ -4,6 +4,7 @@ package io.borlandfcsd.cinemasystem.entity.hibernateEntity;
 import io.borlandfcsd.cinemasystem.entity.PlaceStatus;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,9 +16,10 @@ public class Ticket implements Serializable {
     @Id
     @GeneratedValue
     private int id;
-    @OneToOne
+    @ToString.Exclude
+    @ManyToOne
     @JoinColumn(name = "user_email", referencedColumnName = "email", nullable = false)
-    private User email;
+    private User user;
     @ManyToOne
     @JoinColumn(name = "session_id", nullable = false)
     private MovieSession movieSession;

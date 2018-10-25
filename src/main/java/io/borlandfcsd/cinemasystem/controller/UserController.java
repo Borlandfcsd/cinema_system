@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -20,6 +22,14 @@ public class UserController {
     private UserService userService;
     private SecurityService securityService;
     private UserValidator userValidator;
+
+
+    @Autowired
+    public UserController(UserService userService, SecurityService securityService, UserValidator userValidator) {
+        this.userService = userService;
+        this.securityService = securityService;
+        this.userValidator = userValidator;
+    }
 
     @RequestMapping(value = "/signPage")
     public String getSignUpPage(Model model, String error, String logout) {
@@ -63,18 +73,38 @@ public class UserController {
         return "redirect:/" + referer;
     }
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @GetMapping(value = "/profile")
+    public String getProfile(Model model, Principal principal) {
+        User user = userService.getByEmail(principal.getName());
+        model.addAttribute("userInfo", user);
+        model.addAttribute("edit", false);
+        return "/user/profile";
     }
 
-    @Autowired
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
+    @GetMapping(value = "/profile/editProfile")
+    public String editProfilePage(Model model, Principal principal) {
+        User user = userService.getByEmail(principal.getName());
+        model.addAttribute("userInfo", user);
+        model.addAttribute("edit", true);
+
+        return "/user/profile";
     }
 
-    @Autowired
-    public void setUserValidator(UserValidator userValidator) {
-        this.userValidator = userValidator;
+    @PostMapping(value = "/profile/editProfile/save")
+    public String editProfile(@ModelAttribute User userInfo, BindingResult bindingResult, Model model) {
+
+        if (userInfo.getPassword() != null) {
+            userValidator.validatePassword(userInfo, bindingResult);
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("edit", true);
+                model.addAttribute("userInfo", userInfo);
+                return "/user/profile";
+            }
+        }
+
+        userService.updateUser(userInfo);
+        model.addAttribute("edit", false);
+        return "user/profile";
     }
+
 }

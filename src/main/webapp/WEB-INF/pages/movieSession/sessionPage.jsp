@@ -257,7 +257,7 @@
                         </div>
                         <div class="form-group ticket" >
                             <table class="table">
-                                <h5>Your tickets:</h5>
+                                <h4>Your tickets:</h4>
                                 <tr>
                                     <th>Movie</th>
                                     <th>Date</th>

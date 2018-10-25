@@ -95,7 +95,7 @@
                                 </spring:bind>
                                 <spring:bind path="confirmPassword">
                                     <div class="form-group">
-                                        <form:label path="confirmPassword">Password:</form:label>
+                                        <form:label path="confirmPassword">Confirm Password:</form:label>
                                         <form:input class="form-control" type="password" path="confirmPassword"/>
                                         <form:errors path="confirmPassword"/>
                                     </div>

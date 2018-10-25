@@ -1,13 +1,11 @@
 package io.borlandfcsd.cinemasystem.entity.hibernateEntity;
 
 
-import lombok.Builder;
 import lombok.Data;
-
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "movies")
@@ -34,4 +32,5 @@ public class Movie implements Serializable {
     private String director;
     @Column
     private String rating;
+
 }
