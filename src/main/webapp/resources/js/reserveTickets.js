@@ -34,10 +34,10 @@ var reserveApp = new Vue({
             this.seen = this.tickets.length > 0;
             this.price = this.tickets.length * price;
         },
-        restPost:function () {
-            var prefix = "/tickets/reserveTickets";
+        restPost: function (prefix) {
             var email = document.getElementById("email").value;
             var sessionID =  document.getElementById("session_id").textContent;
+
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -69,9 +69,10 @@ var reserveApp = new Vue({
                 mimeType: 'application/json',
                 success: function(data) {
                     alert(data.message);
-                    location.href = "http://localhost:8080/";
+                    location.href = "http://localhost:8080/sessionPage/" + sessionID;
                 },
                 failure:function () {
+                    alert('You should Sign In for order a ticket');
                     location.href = "http://localhost:8080/signInUp"
                 }
             })

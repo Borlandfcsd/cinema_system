@@ -4,13 +4,20 @@ import io.borlandfcsd.cinemasystem.entity.CinemaHall;
 import io.borlandfcsd.cinemasystem.entity.dto.TicketDto;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.MovieSession;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.Ticket;
-import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User;
 
-import java.util.Set;
+import java.util.List;
 
 public interface TicketService {
-    CinemaHall getTicketsForSession(MovieSession session);
+    CinemaHall getCinemaHallSchema(MovieSession session);
 
-    Set<Ticket> getTicketsForUser(User user);
+    List<Ticket> getTicketsForSession(MovieSession session);
+
+    Ticket findByID(int id);
+
+    void sellTicket(Ticket ticket);
+
+    void cancelTicket(Ticket ticket);
     void reserveTickets(TicketDto tickets, MovieSession session);
+
+    void sellTickets(TicketDto tickets, MovieSession session);
 }

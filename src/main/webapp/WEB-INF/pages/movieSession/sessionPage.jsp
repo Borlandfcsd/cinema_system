@@ -114,6 +114,15 @@
         color: #fff !important;
         /*padding: 5px;*/
         margin-right: 5px;
+        background-color: #a43d00;
+        border: 1px solid #9fa8a8;
+        cursor: default;
+    }
+
+    .SOLD {
+        color: #fff !important;
+        /*padding: 5px;*/
+        margin-right: 5px;
         background-color: #9fa8a8;
         border: 1px solid #9fa8a8;
         cursor: default;
@@ -197,6 +206,15 @@
                         <th>Session date</th>
                         <td><javatime:format value="${movieSession.beginDate}" style="MS"/></td>
                     </tr>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <tr>
+                            <td>
+                                <a href="<c:url value="/admin/tickets/${movieSession.id}"/>">
+                                    Tickets
+                                </a>
+                            </td>
+                        </tr>
+                    </sec:authorize>
                 </table>
                 <div class="screen-handler">
                     <div>
@@ -231,12 +249,18 @@
                                                @click="selectTickets" >${ticket.place}</a>
                                         </c:if>
                                     </sec:authorize>
-                                        <c:if test="${!(ticket.placeStatus eq 'EMPTY')}">
+                                    <c:if test="${ticket.placeStatus eq 'SOLD'}">
                                             <a data-row="${ticket.row}"
                                                data-place="${ticket.place}"
                                                data-price="${ticket.price}"
                                                class="place ${ticket.placeStatus}">X</a>
                                         </c:if>
+                                    <c:if test="${ticket.placeStatus eq 'RESERVED'}">
+                                        <a data-row="${ticket.row}"
+                                           data-place="${ticket.place}"
+                                           data-price="${ticket.price}"
+                                           class="place ${ticket.placeStatus}">R</a>
+                                    </c:if>
 
                                 </c:forEach>
                             </div>
@@ -281,7 +305,14 @@
                             </table>
                         </div>
                         <div class="form-group">
-                            <button class="btn-primary" type="button" onclick="reserveApp.restPost()">Reserve tickets</button>
+                            <button class="btn-primary" type="button"
+                                    onclick="reserveApp.restPost('/tickets/reserveTickets')">Reserve tickets
+                            </button>
+                            <sec:authorize access="hasRole('ROLE_ADMIN')">
+                                <button class="btn-primary" type="button"
+                                        onclick="reserveApp.restPost('/admin/tickets/sellTickets')">Sell tickets
+                                </button>
+                            </sec:authorize>
                         </div>
                     </form>
                 </div>
