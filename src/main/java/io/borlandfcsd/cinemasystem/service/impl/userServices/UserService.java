@@ -1,8 +1,10 @@
 package io.borlandfcsd.cinemasystem.service.impl.userServices;
 
+import io.borlandfcsd.cinemasystem.config.state.SecurityState;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.Role;
 import io.borlandfcsd.cinemasystem.entity.hibernateEntity.user.User;
 import io.borlandfcsd.cinemasystem.repository.RoleRepository;
+import io.borlandfcsd.cinemasystem.repository.TicketRepository;
 import io.borlandfcsd.cinemasystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,14 +20,17 @@ public class UserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private TicketRepository ticketRepository;
     private BCryptPasswordEncoder encoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder encoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, TicketRepository ticketRepository, BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.ticketRepository = ticketRepository;
         this.encoder = encoder;
     }
+
 
     @SuppressWarnings("unchecked")
     @Transactional
@@ -38,9 +43,25 @@ public class UserService {
         userRepository.saveAndFlush(user);
     }
 
+    @Transactional
+    public void updateUser(User userDto) {
+        User user = userRepository.getOne(userDto.getId());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        if (userDto.getPassword() != null) {
+            user.setPassword(encoder.encode(userDto.getPassword()));
+        }
+        userRepository.saveAndFlush(user);
+    }
+
     @SuppressWarnings(value = "unchecked")
     @Transactional
     public User getByEmail(String email) {
-        return userRepository.getByEmail(email);
+        User user = userRepository.getByEmail(email);
+        User authorized = SecurityState.getAuthorizedUser();
+        if (!(authorized.getId() == 0)) {
+            user.setTickets(ticketRepository.findByUser(authorized));
+        }
+        return user;
     }
 }

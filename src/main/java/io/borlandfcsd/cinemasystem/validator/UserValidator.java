@@ -29,6 +29,10 @@ public class UserValidator implements Validator {
             errors.rejectValue("email", "Duplicate.userForm.username");
         }
 
+        validatePassword(user, errors);
+    }
+
+    public void validatePassword(User user, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
 
         if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {

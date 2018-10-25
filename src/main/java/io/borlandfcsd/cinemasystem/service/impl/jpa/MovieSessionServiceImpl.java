@@ -59,7 +59,7 @@ public class MovieSessionServiceImpl implements MovieSessionService {
         return new Timetable(list);
     }
 
-    @Override
+    @Transactional
     public Day getDayWithDate(LocalDate date) {
         List<MovieSession> list = movieSessionRepository.findAllByBeginDateBetween(
                 date.atTime(0, 0),
