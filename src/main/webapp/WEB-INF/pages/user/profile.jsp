@@ -82,35 +82,44 @@
                             <form:input path="id" type="text" readonly="readonly"/>
                         </spring:bind>
                     </div>
-                    <div class="form-group">
-                        <spring:bind path="firstName">
+                    <spring:bind path="firstName">
+                        <div class="form-group ">
+
                             <form:label path="firstName">First name:</form:label>
                             <form:input path="firstName" type="text"/>
-                        </spring:bind>
-                    </div>
-                    <div class="form-group">
-                        <spring:bind path="lastName">
+                            <form:errors class="alert alert-danger" path="firstName"/>
+
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="lastName">
+                        <div class="form-group ${status.error ? 'alert alert-danger' : ''}">
                             <form:label path="lastName">Last Name:</form:label>
                             <form:input path="lastName" type="text"/>
-                        </spring:bind>
-                    </div>
+                            <form:errors class="alert alert-danger" path="lastName"/>
+                        </div>
+                    </spring:bind>
                 </fieldset>
                 <fieldset>
                     <legend>Change password</legend>
-                    <spring:bind path="password">
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:label path="password">Password:</form:label>
-                            <form:input class="form-control" type="password" path="password"/>
-                            <form:errors path="password"/>
-                        </div>
-                    </spring:bind>
-                    <spring:bind path="confirmPassword">
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:label path="confirmPassword">Password:</form:label>
-                            <form:input class="form-control" type="password" path="confirmPassword"/>
-                            <form:errors path="confirmPassword"/>
-                        </div>
-                    </spring:bind>
+                    <div class="row">
+                        <spring:bind path="password">
+                            <div class="form-group col-12 ${status.error ? 'alert alert-danger' : ''}">
+                                <form:label path="password">Password:</form:label>
+                                <form:input class="form-control" type="password" path="password"/>
+                            </div>
+                            <form:errors class="alert alert-danger" path="password"/>
+                        </spring:bind>
+                    </div>
+                    <div class="row">
+                        <spring:bind path="confirmPassword">
+                            <div class="form-group col-12 ${status.error ? 'alert alert-danger' : ''}">
+                                <form:label path="confirmPassword">Confirm password:</form:label>
+                                <form:input class="form-control" type="password" path="confirmPassword"/>
+
+                            </div>
+                            <form:errors class="alert alert-danger" path="confirmPassword"/>
+                        </spring:bind>
+                    </div>
                 </fieldset>
                 <div class="form-group">
                     <form:button type="submit">Save</form:button>
