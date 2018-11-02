@@ -74,12 +74,12 @@
     </nav>
     <c:if test="${message != null}">
         <div class="alert alert-success" role="alert">
-            <strong>Movie</strong>${message}
+            <strong>Movie </strong>${message}
         </div>
     </c:if>
     <c:if test="${exception != null}">
-        <div class="alert alert-error" role="alert">
-            ${exception}
+        <div class="alert alert-danger" role="alert">
+            <strong>Movie </strong>${exception}
         </div>
     </c:if>
     <hr/>
@@ -112,8 +112,115 @@
     <div class="custom-form row">
         <c:url var="addAction" value="/admin/save?${_csrf.parameterName}=${_csrf.token}"/>
 
-        <form:form action="${addAction}" modelAttribute="movie" enctype="multipart/form-data" class="col-lg-5">
-        <fieldset>
+        <form:form action="${addAction}" modelAttribute="movieDto" enctype="multipart/form-data" class="col-lg-5">
+            <fieldset>
+                <legend>Movies Add/Update</legend>
+                <div class="row">
+                    <div  class="col-lg-12" >
+
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <c:if test="${movie.id > 0}">
+                                    <form:label path="movie.id">
+                                        <spring:message text="ID:"/>
+                                    </form:label>
+                                    <form:input class="form-control" path="movie.id" readonly="true" size="8" disabled="true"/>
+                                    <form:hidden path="movie.id"/>
+                                </c:if>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <spring:bind path="movie.title">
+                                <div class="col-lg-12 form-group ${status.error ? 'alert alert-danger' : ''}">
+                                    <form:label path="movie.title">
+                                        <spring:message text="*Title:"/>
+                                    </form:label>
+                                    <form:input class="form-control " path="movie.title"/>
+                                </div>
+                                <form:errors class="alert-danger" path="movie.title"/>
+                            </spring:bind>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="movie.part">
+                                    <spring:message text="Part name:"/>
+                                </form:label>
+                                <form:input class="form-control" path="movie.part"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="movie.year">
+                                    <spring:message text="Year:"/>
+                                </form:label>
+                                <form:input class="form-control" path="movie.year"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <spring:bind path="movie.duration">
+                                <div class="col-lg-12 form-group ${status.error ? 'alert alert-danger' : ''}">
+                                    <form:label path="movie.duration">
+                                        <spring:message text="* Duration:"/>
+                                    </form:label>
+                                    <form:input class="form-control" path="movie.duration"/>
+                                </div>
+                                <form:errors class="alert alert-danger" path="movie.duration"/>
+                            </spring:bind>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="movie.director">
+                                    <spring:message text="Director:"/>
+                                </form:label>
+                                <form:input class="form-control" path="movie.director"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="movie.stars">
+                                    <spring:message text="Stars:"/>
+                                </form:label>
+                                <form:input class="form-control" path="movie.stars"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="movie.rating">
+                                    <spring:message text="Rating imdb:"/>
+                                </form:label>
+                                <form:input class="form-control" path="movie.rating"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="movie.discription">
+                                    <spring:message text="Discription:"/>
+                                </form:label>
+                                <form:input type="text" class="form-control" path="movie.discription"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <form:label path="poster">
+                                    <spring:message text="Poster:"/>
+                                </form:label>
+                                <form:input type="file" class="form-control-file" path="poster"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-group">
+                                <input class="btn btn-primary" type="submit"
+                                       value="<spring:message text="Save movie"/>"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </fieldset>
+        </form:form>
+        <%--<form:form action="${addAction}" modelAttribute="movie" enctype="multipart/form-data" class="col-lg-5">
+            <fieldset>
             <legend>Movies Add/Update</legend>
             <div class="row">
                 <div  class="col-lg-12" >
@@ -210,7 +317,7 @@
             </div>
 
         </fieldset>
-        </form:form>
+        </form:form>--%>
     </div>
 
 </div>

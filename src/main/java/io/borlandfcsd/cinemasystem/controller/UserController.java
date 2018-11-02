@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -84,22 +85,23 @@ public class UserController {
     @GetMapping(value = "/profile/editProfile")
     public String editProfilePage(Model model, Principal principal) {
         User user = userService.getByEmail(principal.getName());
-        model.addAttribute("userInfo", user);
+        user.setPassword("");
+        if(!model.containsAttribute("userInfo")) {
+            model.addAttribute("userInfo", user);
+        }
         model.addAttribute("edit", true);
 
         return "/user/profile";
     }
 
     @PostMapping(value = "/profile/editProfile/save")
-    public String editProfile(@ModelAttribute User userInfo, BindingResult bindingResult, Model model) {
+    public String editProfile(@ModelAttribute final User userInfo, final BindingResult bindingResult, Model model, RedirectAttributes redirect) {
 
-        if (userInfo.getPassword() != null) {
-            userValidator.validatePassword(userInfo, bindingResult);
-            if (bindingResult.hasErrors()) {
-                model.addAttribute("edit", true);
-                model.addAttribute("userInfo", userInfo);
-                return "/user/profile";
-            }
+        userValidator.validetteProfile(userInfo, bindingResult);
+        if (bindingResult.hasErrors()) {
+            redirect.addFlashAttribute("org.springframework.validation.BindingResult.userInfo", bindingResult);
+            redirect.addFlashAttribute("userInfo", userInfo);
+            return "redirect:/profile/editProfile";
         }
 
         userService.updateUser(userInfo);

@@ -32,6 +32,13 @@ public class UserValidator implements Validator {
         validatePassword(user, errors);
     }
 
+    public void validetteProfile(User user, Errors errors){
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "Required");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "Required");
+
+        validatePassword(user, errors);
+    }
+
     public void validatePassword(User user, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
 
